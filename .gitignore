@@ -1,0 +1,7 @@
+__pycache__
+data_augmentation.py
+girino_test.h5
+dados_girino/Aug_Train/*
+dados_girino/Aug_GT/*
+!dados_girino/Aug_Train/.gitkeep
+!dados_girino/Aug_GT/.gitkeep
