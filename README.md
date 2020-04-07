@@ -8,11 +8,15 @@ Nesse caso para instalação dos requerimentos só é preciso a execução do co
 
 O arquivo principal para execução é o main.py, basta executá-lo e as pastas necessárias serão conferidas e criados se necessário. Os arquivos que foram utilizados na Augmentation ficarão salvos na pasta ./dados_girino/Aug_Train e ./dados_girino/Aug_GT os resultados preditos da Rede Neural estarão disponíveis na pasta ./outputs
 
+A função que faz a execução do treinamento da rede é a model.fit_generator, o parâmetro steps_per_epoch é responsável pelo número de imagens que será usado no treinamento (a partir da augmentation) e o epochs é responsável pelo número de loops.
+
 Outros arquivos:
 
     * utils.py contém funções de utilidade
 
     * unet.py contém o modelo da unet e as métricas
+	
+	* data_build.py é uma função usada para conversão das imagens coloridas para binário
 
 Caso queira executar no colab, as instruções básicas são:
 
