@@ -13,7 +13,6 @@ data_gen_args = dict(rescale=1./255,
                     horizontal_flip=True)
 
 image_datagen = ImageDataGenerator(**data_gen_args)
-mask_datagen = ImageDataGenerator(**data_gen_args)
 
 seed = 1
 size_img = 160
@@ -28,52 +27,24 @@ for i in range(len(x_train)):
     masks.append(io.imread(y_train[i]))
 
 images = np.asarray(images)
-images = images.reshape(-1, 160, 160, 1)
+images = images.reshape(-1, size_img, size_img, 1)
 images = np.float64(images)
 masks = np.asarray(masks)
-masks = masks.reshape(-1, 160, 160, 1)
+masks = masks.reshape(-1, size_img, size_img, 1)
 masks = np.float64(masks)
 
-create_folder('./dados_girino/Aug_Train')
-create_folder('./dados_girino/Aug_GT')
-
-#image_datagen.fit(images, augment=True, seed=seed)
 image_generator = image_datagen.flow(images, masks,
-    batch_size=32,
+    batch_size=8,
     seed=seed)
-'''
-image_generator = image_datagen.flow(images,
-    save_to_dir='./dados_girino/Aug_Train/',
-    save_prefix='N',
-    save_format='tif',
-    batch_size=32,
-    seed=seed)
-'''
-'''
-mask_datagen.fit(images, augment=True, seed=seed)
-mask_generator = mask_datagen.flow(masks,
-    batch_size=32,
-    seed=seed)
-'''
-'''
-mask_generator = mask_datagen.flow(masks,
-    save_to_dir='./dados_girino/Aug_GT/',
-    save_prefix='N',
-    save_format='tif',
-    batch_size=32,
-    seed=seed)
-'''
-# combine generators into one which yields image and masks
-#train_generator = zip(image_generator, mask_generator)
 
-model = unet_completa(size_img)
+model = unet_completa(size_img, seed)
 
 model.fit_generator(
     image_generator,
-    steps_per_epoch=300,
-    epochs=20)
+    steps_per_epoch=220,
+    epochs=50)
 
-#model.save('girino_test.h5')
+model.save('girino_test.h5')
 
 images = normalize(images)
 masks = normalize(masks)
