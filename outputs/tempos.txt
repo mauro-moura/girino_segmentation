@@ -1,0 +1,1 @@
+{'Tempo do modelo': 182.6697154045105, 'Tempo de predição': 26.27487277984619, 'Tempo total': 210.62624788284302}

@@ -1,4 +1,4 @@
-# Girino Segmentation v0.01b
+# Girino Segmentation v1.0
 
 Esse é um repositório de segmentação de imagens de girinos.
 
@@ -6,9 +6,11 @@ A versão do python utilizada foi a 3.6, juntamente com o tensorflow 1.15. (No m
 
 Nesse caso para instalação dos requerimentos só é preciso a execução do comando "pip install -r requirements.txt"
 
-O arquivo principal para execução é o main.py, basta executá-lo e as pastas necessárias serão conferidas e criados se necessário. Os arquivos que foram utilizados na Augmentation ficarão salvos na pasta ./dados_girino/Aug_Train e ./dados_girino/Aug_GT os resultados preditos da Rede Neural estarão disponíveis na pasta ./outputs
+O arquivo principal para execução é o main.py, basta executá-lo e as pastas necessárias serão conferidas e criados se necessário. É possível habilitar para que os arquivos que foram utilizados na Augmentation fiquem salvos na pasta ./dados_girino/Aug_Train e ./dados_girino/Aug_GT, porém por gerar diversas imagens acaba gerando muitos arquivos.
 
 A função que faz a execução do treinamento da rede é a model.fit_generator, o parâmetro steps_per_epoch é responsável pelo número de imagens que será usado no treinamento (a partir da augmentation) e o epochs é responsável pelo número de loops.
+
+Após a execução do código, todos os arquivos serão armazenados na pasta outputs, dentre eles um arquivo contendo o tempo de execução do treinamento do modelo, tempo de predição das imaens e tempo total de execução.
 
 Outros arquivos:
 

@@ -6,12 +6,15 @@ from keras.preprocessing.image import ImageDataGenerator
 import numpy as np
 from skimage import io
 import glob
+import time
 
+g_time1 = time.time()
 data_gen_args = dict(shear_range=0.2,
                     zoom_range=0.2,
                     horizontal_flip=True)
 image_datagen = ImageDataGenerator(**data_gen_args)
 
+TEMPO = []
 SEED = 1
 ORIGINAL_SIZE = 850 #Antigo Size Img
 NEW_SIZE = 320 #Tamanho para qual as imagens serão convertidas, deixe igual ao original se não for alterar
@@ -30,11 +33,14 @@ image_generator = image_datagen.flow(images, masks,
     batch_size=8,
     seed=SEED)
 
+time1 = time.time()
 model = unet_completa(NEW_SIZE, SEED)
 model.fit_generator(
     image_generator,
     steps_per_epoch=220,
     epochs=50)
+time2 = time.time()
+TEMPO.append(time2 - time1)
 
 #model.save('girino_test.h5')
 
@@ -44,9 +50,13 @@ new_imgs_load = load_images(new_imgs, ORIGINAL_SIZE, NEW_SIZE)
 ''' 
 #Realizando Novas Predições
 '''
+time1 = time.time()
 new_predicao = model.predict(new_imgs_load)
 new_predicao = new_predicao > 0.5
 new_predicao = np.float64(new_predicao)
+time2 = time.time()
+TEMPO.append(time2 - time1)
+
 print("Predizendo " + str(len(new_predicao)) + " Imagens")
 create_folder('outputs')
 for i in range(len(new_predicao)):
@@ -64,3 +74,13 @@ for i in range(len(predicao)):
 print('Salvando valores de Dice...\nMédia dos Dices: ' + str(np.mean(dice_metric)))
 with open('./outputs/dice_metric.txt', 'w') as file:
     file.write(str(dice_metric))
+
+print('Calculando Tempo')
+g_time2 = time.time()
+TEMPO.append(g_time2 - g_time1)
+d = {'Tempo do modelo': TEMPO[0],
+     'Tempo de predição': TEMPO[1],
+     'Tempo total': TEMPO[2]}
+with open('./outputs/tempos.txt', 'w') as file:
+    file.write(str(d))
+
