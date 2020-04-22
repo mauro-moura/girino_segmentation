@@ -16,7 +16,6 @@ def dice_coef_loss(y_true, y_pred):
     return 1.-dice_coef(y_true, y_pred)
 
 def unet_completa(size_img, SEED = 1):
-    
     CONCAT_AXIS = -1
     INITIALIZER = he_normal(seed = SEED)
 
@@ -72,36 +71,48 @@ def unet_completa(size_img, SEED = 1):
     
     return model
 
-def unet_mini(size_img):
+def unet_mini(size_img, SEED = 1):
     MERGE_AXIS = -1
+    INITIALIZER = he_normal(seed = SEED)
     input_size = (size_img, size_img, 1)
 
     inputs = Input(shape = (input_size))
-    conv1 = Conv2D(32, (3, 3), activation='relu', padding='same')(inputs)
+    conv1 = Conv2D(32, (3, 3), activation='relu', padding='same',
+                  kernel_initializer = INITIALIZER)(inputs)
     conv1 = Dropout(0.2)(conv1)
-    conv1 = Conv2D(32, (3, 3), activation='relu', padding='same')(conv1)
+    conv1 = Conv2D(32, (3, 3), activation='relu', padding='same',
+                  kernel_initializer = INITIALIZER)(conv1)
     pool1 = MaxPooling2D((2, 2))(conv1)
 
-    conv2 = Conv2D(64, (3, 3), activation='relu', padding='same')(pool1)
+    conv2 = Conv2D(64, (3, 3), activation='relu', padding='same',
+                  kernel_initializer = INITIALIZER)(pool1)
     conv2 = Dropout(0.2)(conv2)
-    conv2 = Conv2D(64, (3, 3), activation='relu', padding='same')(conv2)
+    conv2 = Conv2D(64, (3, 3), activation='relu', padding='same',
+                  kernel_initializer = INITIALIZER)(conv2)
     pool2 = MaxPooling2D((2, 2))(conv2)
 
-    conv3 = Conv2D(128, (3, 3), activation='relu', padding='same')(pool2)
+    conv3 = Conv2D(128, (3, 3), activation='relu', padding='same',
+                  kernel_initializer = INITIALIZER)(pool2)
     conv3 = Dropout(0.2)(conv3)
-    conv3 = Conv2D(128, (3, 3), activation='relu', padding='same')(conv3)
+    conv3 = Conv2D(128, (3, 3), activation='relu', padding='same',
+                  kernel_initializer = INITIALIZER)(conv3)
 
     up1 = concatenate([UpSampling2D((2, 2))(conv3), conv2], axis=MERGE_AXIS)
-    conv4 = Conv2D(64, (3, 3), activation='relu', padding='same')(up1)
+    conv4 = Conv2D(64, (3, 3), activation='relu', padding='same',
+                  kernel_initializer = INITIALIZER)(up1)
     conv4 = Dropout(0.2)(conv4)
-    conv4 = Conv2D(64, (3, 3), activation='relu', padding='same')(conv4)
+    conv4 = Conv2D(64, (3, 3), activation='relu', padding='same',
+                  kernel_initializer = INITIALIZER)(conv4)
 
     up2 = concatenate([UpSampling2D((2, 2))(conv4), conv1], axis=MERGE_AXIS)
-    conv5 = Conv2D(32, (3, 3), activation='relu', padding='same')(up2)
+    conv5 = Conv2D(32, (3, 3), activation='relu', padding='same',
+                  kernel_initializer = INITIALIZER)(up2)
     conv5 = Dropout(0.2)(conv5)
-    conv5 = Conv2D(32, (3, 3), activation='relu', padding='same')(conv5)
+    conv5 = Conv2D(32, (3, 3), activation='relu', padding='same',
+                  kernel_initializer = INITIALIZER)(conv5)
 
-    o = Conv2D(1, (1, 1), padding='same')(conv5)
+    o = Conv2D(1, (1, 1), activation = 'sigmoid', padding='same')(conv5)
     model = Model(input = inputs, output = o)
-    model.compile(optimizer = Adam(lr = 1e-5), loss = dice_coef_loss, metrics=[dice_coef])
+    model.compile(optimizer = Adam(lr = 1e-5),
+                  loss = dice_coef_loss, metrics=[dice_coef])
     return model

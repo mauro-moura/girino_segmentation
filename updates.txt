@@ -1,5 +1,8 @@
+Outputs
+- Os nomes dos GTs foram alterados de acordo com a slice correspondente (meramente comparativo)
+
 main.py
-- no sorted do glob foi adicionada a key = len para garantir que o carregamento seja identico pra todos
+- Foi adicionada uma verificação se as imagens e os GTs estão sendo importados na mesma ordem
 - size_img agora inicia com o valor do tamanho da imagem, porém com o tempo é atualizado automaticamente de acordo com o novo tamanho das imagens
 - O tamanho definido(chute inicial) foi de 256x256. O dice obtido com esses para cada volue conhecido pode ser observado na pasta de outputs
 - No momento em que as imagens são salvas, agora é definido também um novo tamanho para que sejam salvas com o mesmo tamanho das originais, ou seja o reverse_size
