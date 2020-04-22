@@ -1,6 +1,6 @@
 
 from unet import unet_completa, dice_coef
-from utils import create_folder, normalize, load_images
+from utils import create_folder, load_images, reverse_size
 import tensorflow as tf
 from keras.preprocessing.image import ImageDataGenerator
 import numpy as np
@@ -12,38 +12,41 @@ data_gen_args = dict(shear_range=0.2,
                     horizontal_flip=True)
 image_datagen = ImageDataGenerator(**data_gen_args)
 
-seed = 1
-size_img = 160
+SEED = 1
+ORIGINAL_SIZE = 850 #Antigo Size Img
+NEW_SIZE = 160 #Tamanho para qual as imagens serão convertidas, deixe igual ao original se não for alterar
 
-x_train = sorted(glob.glob('./dados_girino/Train/*'))
-y_train = sorted(glob.glob('./dados_girino/GT/*'))
+x_train = sorted(glob.glob('./dados_girino/Train/*'), key = len)
+y_train = sorted(glob.glob('./dados_girino/GT/*'), key = len)
 
-images = load_images(x_train)
-masks = load_images(y_train)
+images = load_images(x_train, size_img = ORIGINAL_SIZE, new_size = NEW_SIZE)
+masks = load_images(y_train, size_img = ORIGINAL_SIZE, new_size = NEW_SIZE)
 
 image_generator = image_datagen.flow(images, masks,
     batch_size=8,
-    seed=seed)
+    seed=SEED)
 
-model = unet_completa(size_img, seed)
+model = unet_completa(NEW_SIZE, SEED)
 model.fit_generator(
     image_generator,
     steps_per_epoch=220,
     epochs=50)
 
-model.save('girino_test.h5')
+#model.save('girino_test.h5')
 
 print("Carregando novas imagens")
 new_imgs = sorted(glob.glob('./dados_girino/MeanAnisoImJ/*'))
-new_imgs_load = load_images(new_imgs)
+new_imgs_load = load_images(new_imgs, ORIGINAL_SIZE, NEW_SIZE, key = len)
 
-''' Realizando Novas Predições '''
+''' 
+#Realizando Novas Predições
+'''
 new_predicao = model.predict(new_imgs_load)
 new_predicao = new_predicao > 0.5
 new_predicao = np.float64(new_predicao)
 create_folder('outputs')
 for i in range(len(new_predicao)):
-    io.imsave('./outputs/predicao_%i.png'%(i), new_predicao[i])
+    io.imsave('./outputs/predicao_%s.png'%(new_imgs[i][-8:-4]), reverse_size(new_predicao[i], new_size = ORIGINAL_SIZE))
 
 print("Calculando o dice para as máscaras conhecidas")
 predicao = model.predict(images)
