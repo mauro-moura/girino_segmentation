@@ -32,19 +32,29 @@ for i in range(len(x_train)):
 images = load_images(x_train, size_img = ORIGINAL_SIZE, new_size = NEW_SIZE)
 masks = load_images(y_train, size_img = ORIGINAL_SIZE, new_size = NEW_SIZE)
 
+IMG_ENTRADA = load_images(sorted(glob.glob('./dados_girino/AugTrain/*')),
+                            size_img = ORIGINAL_SIZE, new_size = NEW_SIZE)
+IMG_SAIDA = load_images(sorted(glob.glob('./dados_girino/AugGT/*')),
+                            size_img = ORIGINAL_SIZE, new_size = NEW_SIZE)
+
+'''
 image_generator = image_datagen.flow(images, masks,
     batch_size=8,
     seed=SEED)
+'''
 
 time1 = time.time()
-#model = unet_completa(NEW_SIZE, SEED, metric_loss= dice_coef_loss, metric= dice_coef)
+model = unet_completa(NEW_SIZE, SEED, metric_loss= dice_coef_loss, metric= dice_coef)
 #model = BCDU_net_D3(input_size = (NEW_SIZE, NEW_SIZE, 1), metric_loss= dice_coef_loss, metric= dice_coef)
-model = vnet(input_size = (10, 100, NEW_SIZE, NEW_SIZE, 1), loss = dice_coef_loss, metrics = [dice_coef])
+#model = vnet(input_size = (10, 100, NEW_SIZE, NEW_SIZE, 1), loss = dice_coef_loss, metrics = [dice_coef])
 
+'''
 model.fit_generator(
     image_generator,
     steps_per_epoch=256,
     epochs=1)
+'''
+model.fit(IMG_ENTRADA, IMG_SAIDA, batch_size=32, epochs=1)
 
 time2 = time.time()
 TEMPO.append(time2 - time1)
