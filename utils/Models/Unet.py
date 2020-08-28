@@ -6,16 +6,7 @@ from keras.initializers import he_normal
 from keras.optimizers import Adam, RMSprop
 from keras import backend as K
 
-def dice_coef(y_true, y_pred):
-    y_true_f = K.flatten(y_true)
-    y_pred_f = K.flatten(y_pred)
-    intersection = K.sum(y_true_f * y_pred_f)
-    return (2. * intersection) / (K.sum(y_true_f*y_true_f) + K.sum(y_pred_f*y_pred_f))
-
-def dice_coef_loss(y_true, y_pred):
-    return 1.-dice_coef(y_true, y_pred)
-
-def unet_completa(size_img, SEED = 1):
+def unet_completa(size_img = 128, SEED = 1, metric_loss = 'binary_crossentropy', metric = 'accuracy'):
     CONCAT_AXIS = -1
     INITIALIZER = he_normal(seed = SEED)
 
@@ -67,11 +58,11 @@ def unet_completa(size_img, SEED = 1):
     
     model = Model(inputs = inputs, outputs = conv10)
     
-    model.compile(optimizer = Adam(lr = 1e-5), loss = dice_coef_loss, metrics=[dice_coef])
+    model.compile(optimizer = Adam(lr = 1e-5), loss = metric_loss, metrics=[metric])
     
     return model
 
-def unet_mini(size_img, SEED = 1):
+def unet_mini(size_img, SEED = 1, metric_loss = 'binary_crossentropy', metric = 'accuracy'):
     MERGE_AXIS = -1
     INITIALIZER = he_normal(seed = SEED)
     input_size = (size_img, size_img, 1)
@@ -112,7 +103,7 @@ def unet_mini(size_img, SEED = 1):
                   kernel_initializer = INITIALIZER)(conv5)
 
     o = Conv2D(1, (1, 1), activation = 'sigmoid', padding='same')(conv5)
-    model = Model(input = inputs, output = o)
+    model = Model(inputs = inputs, outputs = o)
     model.compile(optimizer = Adam(lr = 1e-5),
-                  loss = dice_coef_loss, metrics=[dice_coef])
+                  loss = metric_loss, metrics=[metric])
     return model
