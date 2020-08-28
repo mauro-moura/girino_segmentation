@@ -1,5 +1,7 @@
 # Girino Segmentation v1.0
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/mauro-moura/girino_segmentation/blob/master/main_colab.ipynb)
+
 ## Sobre
 
 Esse é um repositório de segmentação de imagens de girinos.
