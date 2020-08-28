@@ -1,9 +1,11 @@
 __pycache__
-data_augmentation.py
 girino_test.h5
 dados_girino/OLD_GT
 dados_girino/Aug_Train/*
 dados_girino/Aug_GT/*
+dados_girino/GT/*
+dados_girino/Train/*
+dados_girino/MeanAnisoImj
 !dados_girino/Aug_Train/.gitkeep
 !dados_girino/Aug_GT/.gitkeep
 !outputs/.gitkeep
