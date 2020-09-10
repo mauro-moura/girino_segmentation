@@ -60,10 +60,15 @@ class MauroDataGenerator():
         
         return images, masks
     
-    def run_all(self, filenames_x, filenames_y, save=False):
+    def run_all(self, filenames_x, filenames_y,
+                    seed = 42, n_img = 8, size_img = 850, save=False,
+                    train_path= './dados_girino/Aug_Train', gt_path= './dados_girino/Aug_GT'):
         x = self.simple_load_images(filenames_x)
         y = self.simple_load_images(filenames_y)
 
-        images, masks = self.data_agumentation_v2(filenames_x, filenames_y, x, y, self.datagen, n_img=8, size_img=850)
+        images, masks = self.data_agumentation_v2(filenames_x, filenames_y, x, y, self.datagen, seed=seed,
+                             n_img=n_img, size_img=size_img, save=save, train_path=train_path,
+                             gt_path=gt_path)
+        
         return np.float64(images), np.float64(masks)
 

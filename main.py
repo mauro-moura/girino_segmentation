@@ -7,7 +7,7 @@ from skimage import io
 from modules.Models.Unet import unet_completa
 from modules.Models.Vnet import vnet
 from modules.Models.LstmUnet import BCDU_net_D3
-from data_augmentation import MauroDataGenerator
+from modules.data_augmentation import MauroDataGenerator
 from modules.utils import dice_coef, dice_coef_loss
 from modules.utils import create_folder, load_images, reverse_size
 
@@ -23,14 +23,17 @@ x_train = sorted(glob.glob('./dados_girino/Train/*.tif'))
 y_train = sorted(glob.glob('./dados_girino/GT/*.tif'))
 images = load_images(x_train, size_img = ORIGINAL_SIZE, new_size = NEW_SIZE)
 masks = load_images(y_train, size_img = ORIGINAL_SIZE, new_size = NEW_SIZE)
+
 # Imagens Augmentadas
 x_entrada = sorted(glob.glob('./dados_girino/Aug_Train/*.tiff'))
 y_entrada = sorted(glob.glob('./dados_girino/Aug_GT/*.tiff'))
+'''
 IMG_ENTRADA = load_images(x_entrada, size_img = ORIGINAL_SIZE, new_size = NEW_SIZE)
 IMG_SAIDA = load_images(y_entrada, size_img = ORIGINAL_SIZE, new_size = NEW_SIZE)
+'''
 
 dataAug = MauroDataGenerator()
-IMG_ENTRADA, IMG_SAIDA = dataAug.run_all(filenames_x, filenames_y)
+IMG_ENTRADA, IMG_SAIDA = dataAug.run_all(x_entrada, y_entrada)
 
 time1 = time.time()
 model = unet_completa(NEW_SIZE, SEED, metric_loss= dice_coef_loss, metric= dice_coef)
