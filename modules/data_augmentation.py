@@ -38,7 +38,7 @@ class MauroDataGenerator():
 
             i = 0
             for batch_x in (datagen.flow(image, batch_size= 1, seed=seed)):
-                images.insert(j+20*i, batch_x)
+                images.insert(j+20*i, batch_x.reshape(size_img, size_img, 1))
                 if (save):
                     FNAME_X = train_path + str(i) + filenames_x[j][8:-4] + '.tiff'
                     batch_x = batch_x.reshape(size_img, size_img)
@@ -49,7 +49,7 @@ class MauroDataGenerator():
             
             i = 0
             for batch_y in (datagen.flow(mask, batch_size= 1, seed=seed)):
-                masks.insert(j+20*i, batch_y)
+                masks.insert(j+20*i, batch_y.reshape(size_img, size_img, 1))
                 if (save):
                     FNAME_Y = gt_path + str(i) + filenames_y[j][5:-4] + '.tiff'
                     batch_y = batch_y.reshape(size_img, size_img)

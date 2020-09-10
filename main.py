@@ -24,16 +24,16 @@ y_train = sorted(glob.glob('./dados_girino/GT/*.tif'))
 images = load_images(x_train, size_img = ORIGINAL_SIZE, new_size = NEW_SIZE)
 masks = load_images(y_train, size_img = ORIGINAL_SIZE, new_size = NEW_SIZE)
 
+'''
 # Imagens Augmentadas
 x_entrada = sorted(glob.glob('./dados_girino/Aug_Train/*.tiff'))
 y_entrada = sorted(glob.glob('./dados_girino/Aug_GT/*.tiff'))
-'''
 IMG_ENTRADA = load_images(x_entrada, size_img = ORIGINAL_SIZE, new_size = NEW_SIZE)
 IMG_SAIDA = load_images(y_entrada, size_img = ORIGINAL_SIZE, new_size = NEW_SIZE)
 '''
 
 dataAug = MauroDataGenerator()
-IMG_ENTRADA, IMG_SAIDA = dataAug.run_all(x_entrada, y_entrada)
+IMG_ENTRADA, IMG_SAIDA = dataAug.run_all(x_train, y_train)
 
 time1 = time.time()
 model = unet_completa(NEW_SIZE, SEED, metric_loss= dice_coef_loss, metric= dice_coef)
