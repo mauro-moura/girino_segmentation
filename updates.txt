@@ -1,4 +1,0 @@
-Foi criada uma pasta Models onde foram adicionados os arquivos da V-Net e de uma Unet com LSTM.
-O dice coef foi alterado para o arquivo utils.py
-
-

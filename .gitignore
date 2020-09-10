@@ -1,5 +1,6 @@
 __pycache__
 girino_test.h5
-outputs/
+test.py
+outputs/*
 !outputs/.gitkeep
 !outputs/dice_metric.txt
