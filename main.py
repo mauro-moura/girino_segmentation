@@ -36,12 +36,13 @@ dataAug = MauroDataGenerator()
 IMG_ENTRADA, IMG_SAIDA = dataAug.run_all(x_train, y_train,
                                          images, masks,
                                          size_img=NEW_SIZE,
+                                         n_img=30,
                                          Aug_2D=False)
 
 time1 = time.time()
-model = unet_completa(NEW_SIZE, SEED, metric_loss= dice_coef_loss, metric= dice_coef)
+#model = unet_completa(NEW_SIZE, SEED, metric_loss= dice_coef_loss, metric= dice_coef)
 #model = BCDU_net_D3(input_size = (NEW_SIZE, NEW_SIZE, 1), metric_loss= dice_coef_loss, metric= dice_coef)
-#model = vnet(input_size = (20, 200, NEW_SIZE, NEW_SIZE, 1), loss = dice_coef_loss, metrics = [dice_coef])
+model = vnet(input_size = (20, NEW_SIZE, NEW_SIZE, 1), loss = dice_coef_loss, metrics = [dice_coef])
 
 model.fit(IMG_ENTRADA, IMG_SAIDA, batch_size=2, epochs=50)
 
