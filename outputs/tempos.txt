@@ -1,0 +1,1 @@
+{'Tempo de treinamento': 15497.977280139923, 'Tempo de teste': 72.54057812690735, 'Tempo total': 15570.51785826683}
