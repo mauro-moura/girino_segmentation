@@ -1,0 +1,7 @@
+tensorflow-gpu==1.15
+keras==2.3
+scikit-image
+opencv-python
+imagecodecs
+Pillow
+h5py==2.10.0

@@ -1,0 +1,14 @@
+__pycache__
+.vscode
+*.h5
+.env
+
+dados_girino/*.tif
+dados_girino/*.png
+
+data_build/dados_girino/*.tif
+data_build/dados_girino/*.png
+
+*.tif
+*.tiff
+*.png
